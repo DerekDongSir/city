@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{% static 'jquery.2.2.1.min.js' %}"></script>
+    <script>
+          function get_city(id){
+              var pro_id = $("#"+id).attr('id');
+              $.ajax({
+                  type:'get',
+                  url:"/get_city",
+                  data:'pro_id='+pro_id,
+                  success:function (res) {
+                      {#alert(res);#}
+                  }
+              })
+          }
+    </script>
+</head>
+<body>
+<select name="" id="pro_id" onchange="get_city(this.options[this.selectedIndex].id)">
+    <option value="省份">省份</option>
+    {% for pro in province %}
+        <option  id="{{ pro.id }}" value="{{ pro.cityname }}">{{pro.cityname }}</option>
+    {% endfor %}
+</select>
+<select name="" id="city_id">
+    <option value="城市">城市</option>
+</select>
+<select name="" id="town_id">
+    <option value="县/区">县区</option>
+</select>
+</body>
+</html>
