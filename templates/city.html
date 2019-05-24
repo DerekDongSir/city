@@ -12,24 +12,43 @@
                   type:'get',
                   url:"/get_city",
                   data:'pro_id='+pro_id,
-                  success:function (res) {
-                      {#alert(res);#}
+                  success:function (cities){
+                      {#省份发生变动，将市与县区的信息同时归为初始状态#}
+                       $("#city_id").html("<option value=\"城市\">城市</option>");
+                       $("#town_id").html("<option value=\"县/区\">县/区</option>");
+                       for(var i=0;i<cities.length;i++){
+                          $("#city_id").append('<option id="'+cities[i]['id']+'" value="'+cities[i]["cityname"]+'" >'+cities[i]["cityname"]+'</option>')
+                      }
+                  }
+              })
+          }
+          function get_town(id) {
+              var city_id = $("#"+id).attr('id');
+              $.ajax({
+                  type:'get',
+                  url:"/get_town",
+                  data:'city_id='+city_id,
+                  success:function (towns){
+                       $("#town_id").html("<option value=\"县/区\">县/区</option>");
+                       for(var i=0;i<towns.length;i++){
+                          $("#town_id").append('<option id="'+towns[i]['id']+'" value="'+towns[i]["townname"]+'" >'+towns[i]["townname"]+'</option>')
+                      }
                   }
               })
           }
     </script>
 </head>
 <body>
-<select name="" id="pro_id" onchange="get_city(this.options[this.selectedIndex].id)">
+<select name="province" id="pro_id" onchange="get_city(this.options[this.selectedIndex].id)">
     <option value="省份">省份</option>
     {% for pro in province %}
         <option  id="{{ pro.id }}" value="{{ pro.cityname }}">{{pro.cityname }}</option>
     {% endfor %}
 </select>
-<select name="" id="city_id">
+<select name="city" id="city_id" onchange="get_town(this.options[this.selectedIndex].id)">
     <option value="城市">城市</option>
 </select>
-<select name="" id="town_id">
+<select name="town" id="town_id" >
     <option value="县/区">县区</option>
 </select>
 </body>
